@@ -79,6 +79,7 @@ let poidsChart = new Chart(poidsChartCanvas, {
 mettreAJourGraphique();
 afficherPoidsListe();
 mettreAJourListeDeroulante();
+
 // Ajout d’un aliment à la journée
 form.addEventListener('submit', function(e) {
   e.preventDefault();
@@ -115,6 +116,8 @@ form.addEventListener('submit', function(e) {
 
     total += points;
     totalPoints.textContent = total;
+	document.getElementById('barre-objectif').value = total;
+
 
     if (!historique[date]) {
       historique[date] = [];
@@ -295,3 +298,4 @@ importInput.addEventListener('change', function () {
   };
   reader.readAsText(file);
 });
+
