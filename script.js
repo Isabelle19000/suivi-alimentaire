@@ -50,6 +50,14 @@ if (localStorage.getItem('baseAliments')) {
   baseAliments = JSON.parse(localStorage.getItem('baseAliments'));
 }
 
+// Enregistrement du service worker pour installation mobile (PWA)
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('service-worker.js')
+    .then(() => console.log('Service Worker enregistré'))
+    .catch(err => console.error('Erreur SW:', err));
+}
+
+
 // Initialisation du graphique
 let poidsData = {
   labels: [],
