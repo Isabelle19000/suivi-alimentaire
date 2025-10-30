@@ -339,3 +339,8 @@ importInput.addEventListener('change', function () {
   reader.readAsText(file);
 });
 
+window.addEventListener('load', () => {
+  const chargement = document.getElementById('chargement');
+  if (chargement) chargement.style.display = 'none';
+});
+
