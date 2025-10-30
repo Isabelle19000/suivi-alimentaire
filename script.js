@@ -182,7 +182,29 @@ function afficherHistorique() {
     section.appendChild(ul);
     historiqueDiv.appendChild(section);
   }
+	 afficherCalendrier();
 }
+
+// Afficher calendrier
+function afficherCalendrier() {
+  const calendrier = document.getElementById('calendrier');
+  calendrier.innerHTML = '';
+
+  const dates = Object.keys(historique);
+  dates.forEach(date => {
+    const bouton = document.createElement('button');
+    bouton.textContent = date;
+    bouton.style.margin = '5px';
+    bouton.addEventListener('click', () => {
+      const aliments = historique[date]
+        .map(a => `${a.nom} - ${a.points} pts`)
+        .join('\n');
+      alert(`Aliments du ${date} :\n${aliments}`);
+    });
+    calendrier.appendChild(bouton);
+  });
+}
+
 // Ajout d’un poids
 poidsForm.addEventListener('submit', function(e) {
   e.preventDefault();
