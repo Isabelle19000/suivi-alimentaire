@@ -18,6 +18,9 @@ const formAjout = document.getElementById('form-ajout-aliment');
 const nouvelAliment = document.getElementById('nouvel-aliment');
 const nouveauxPoints = document.getElementById('nouveaux-points');
 
+const exportBtn = document.getElementById('export-base');
+const importInput = document.getElementById('import-base');
+
 // Données
 let total = 0;
 let historique = {};
@@ -137,7 +140,7 @@ resetButton.addEventListener('click', function() {
   localStorage.removeItem('totalPoints');
 });
 
-// Réinitialisation complète avec confirmation
+// Réinitialisation complète
 resetAllButton.addEventListener('click', function () {
   const confirmation = confirm("⚠️ Cette action va effacer toutes les données. Continuer ?");
   if (!confirmation) return;
@@ -258,3 +261,18 @@ formAjout.addEventListener('submit', function(e) {
     formAjout.reset();
   }
 });
+
+// Exporter la base
+exportBtn.addEventListener('click', function () {
+  const dataStr = JSON.stringify(baseAliments, null, 2);
+  const blob = new Blob([dataStr], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = "base-aliments.json";
+  a.click();
+  URL.revokeObjectURL(url);
+});
+
+// Importer la base
+importInput.addEventListener('change', function ()
