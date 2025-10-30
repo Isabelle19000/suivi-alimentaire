@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Suivi alimentaire et poids</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+  <header>
+    <h1>Mon suivi alimentaire et poids</h1>
+  </header>
+
+  <main>
+
+    <section>
+      <h2>Ajouter un aliment à la journée</h2>
+      <form id="form-aliment">
+        <select id="nom">
+          <option value="">-- Choisir un aliment --</option>
+        </select>
+        <input type="number" id="points" placeholder="Points" step="0.1" required>
+        <button type="submit">Ajouter</button>
+      </form>
+      <ul id="liste-aliments"></ul>
+      <p>Total de points : <span id="total-points">0</span></p>
+      <button id="reset">Réinitialiser la journée</button>
+    </section>
+
+    <section>
+      <h2>Historique alimentaire</h2>
+      <div id="historique"></div>
+    </section>
+
+    <section>
+      <h2>Ajouter un aliment à la base</h2>
+      <form id="form-ajout-aliment">
+        <input type="text" id="nouvel-aliment" placeholder="Nom de l'aliment" required>
+        <input type="number" id="nouveaux-points" placeholder="Points" step="0.1" required>
+        <button type="submit">Ajouter</button>
+      </form>
+    </section>
+
+    <section>
+      <h2>Suivi du poids</h2>
+      <form id="form-poids">
+        <input type="number" id="poids" placeholder="Poids (kg)" step="0.1" required>
+        <button type="submit">Ajouter</button>
+      </form>
+      <ul id="liste-poids"></ul>
+      <canvas id="poidsChart"></canvas>
+    </section>
+
+    <section>
+      <h2>Réinitialisation complète</h2>
+      <button id="reset-all">Effacer toutes les données</button>
+    </section>
+
+  </main>
+
+  <footer>
+    <p>&copy; 2025 - Suivi personnel</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
