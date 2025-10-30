@@ -119,3 +119,29 @@ canvas {
     font-size: 1em;
   }
 }
+
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: #1e1e1e;
+    color: #f0f0f0;
+  }
+
+  input, select, button {
+    background-color: #333;
+    color: #f0f0f0;
+    border: 1px solid #555;
+  }
+
+  button:hover {
+    background-color: #555;
+  }
+
+  .btn-supprimer {
+    background-color: #c62828;
+  }
+
+  .btn-supprimer:hover {
+    background-color: #b71c1c;
+  }
+}
+
