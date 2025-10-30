@@ -259,6 +259,16 @@ function mettreAJourListeDeroulante() {
     option.textContent = aliment.nom;
     nomSelect.appendChild(option);
   });
+   // Ajout de la suggestion automatique
+  suggereAliments();
+}
+
+// Suggere des aliment à 0 pts
+function suggereAliments() {
+  const suggestions = baseAliments.filter(a => a.points === 0);
+  if (suggestions.length > 0) {
+    alert("Suggestions à 0 point :\n" + suggestions.map(a => a.nom).join('\n'));
+  }
 }
 
 // Auto-remplissage des points
