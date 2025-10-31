@@ -31,9 +31,14 @@ let baseAliments = [
   { nom: "Pain", points: 3, favori: true }
 ];
 
-if (localStorage.getItem('baseAliments')) {
-  baseAliments = JSON.parse(localStorage.getItem('baseAliments'));
+const sauvegarde = localStorage.getItem('baseAliments');
+if (sauvegarde) {
+  const parsed = JSON.parse(sauvegarde);
+  if (Array.isArray(parsed) && parsed.length > 0) {
+    baseAliments = parsed;
+  }
 }
+
 mettreAJourListeDeroulante(); // ← met à jour la datalist
 
 // Chargement des données depuis localStorage
