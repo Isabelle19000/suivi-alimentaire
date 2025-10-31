@@ -369,6 +369,28 @@ nomSelect.addEventListener('change', function () {
 // Ajout d’un aliment à la base
 formAjout.addEventListener('submit', function(e) {
   e.preventDefault();
+  const formModif = document.getElementById('form-modif-aliment');
+const modifNom = document.getElementById('modif-nom');
+const modifPoints = document.getElementById('modif-points');
+
+formModif.addEventListener('submit', function(e) {
+  e.preventDefault();
+  const nom = modifNom.value.trim();
+  const points = parseFloat(modifPoints.value);
+
+  const aliment = baseAliments.find(a => a.nom.toLowerCase() === nom.toLowerCase());
+  if (aliment && !isNaN(points)) {
+    aliment.points = points;
+    localStorage.setItem('baseAliments', JSON.stringify(baseAliments));
+    mettreAJourListeDeroulante();
+    afficherBaseAliments();
+    alert(`Aliment "${nom}" mis à jour avec ${points} points.`);
+    formModif.reset();
+  } else {
+    alert("Aliment introuvable ou points invalides.");
+  }
+});
+
   const nom = nouvelAliment.value.trim();
   const points = parseFloat(nouveauxPoints.value);
 
