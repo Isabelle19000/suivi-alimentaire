@@ -31,13 +31,12 @@ let baseAliments = [
   { nom: "Pain", points: 3, favori: true }
 ];
 
-// 🔹 Initialisation si rien n'est encore enregistré
+// Initialisation si rien n’est encore enregistré
 if (!localStorage.getItem('baseAliments')) {
   localStorage.setItem('baseAliments', JSON.stringify(baseAliments));
-  console.log("Base initiale enregistrée dans localStorage");
 }
 
-// 🔹 Chargement depuis localStorage si disponible
+// Chargement depuis localStorage si disponible
 const sauvegarde = localStorage.getItem('baseAliments');
 if (sauvegarde) {
   const parsed = JSON.parse(sauvegarde);
@@ -46,8 +45,9 @@ if (sauvegarde) {
   }
 }
 
-// 🔹 Mise à jour de la datalist
+// ✅ Mise à jour de la datalist au démarrage
 mettreAJourListeDeroulante();
+
 
 
 // Chargement des données depuis localStorage
@@ -79,10 +79,6 @@ nomInput.addEventListener('input', () => {
     pointsInput.value = '';
   }
 });
-
-
-
-
 
 
 // Enregistrement du service worker pour installation mobile (PWA)
@@ -330,7 +326,6 @@ function afficherPoidsListe() {
   });
 }
 
-// Liste déroulante des aliments
 function mettreAJourListeDeroulante() {
   const datalist = document.getElementById('liste-aliments');
   datalist.innerHTML = '';
@@ -340,10 +335,10 @@ function mettreAJourListeDeroulante() {
     option.value = aliment.nom;
     datalist.appendChild(option);
   });
+
+  console.log("Datalist mise à jour :", baseAliments); // ← ici, à l’intérieur
 }
 
-  console.log("Datalist mise à jour :", baseAliments);
-		  
   // 🧠 Tri : favoris d’abord, puis ordre alphabétique
   const alimentsTries = [...baseAliments]
     .sort((a, b) => {
@@ -447,23 +442,23 @@ formAjout.addEventListener('submit', function(e) {
     );
 
     if (alimentExistant) {
-      // Met à jour les points si l’aliment existe déjà
       alimentExistant.points = points;
       alert(`L'aliment "${nom}" a été mis à jour.`);
     } else {
-      // Ajoute un nouvel aliment
       baseAliments.push({ nom, points, favori: false });
       alert(`L'aliment "${nom}" a été ajouté.`);
     }
 
+    // ✅ C’est ici que tu dois placer la sauvegarde et la mise à jour :
     localStorage.setItem('baseAliments', JSON.stringify(baseAliments));
     mettreAJourListeDeroulante();
-    afficherBaseAliments();
+
     formAjout.reset();
   } else {
     alert("Merci de saisir un nom et des points valides.");
   }
 });
+
 
 // ✅ Modification d’un aliment via formulaire dédié
 formModif.addEventListener('submit', function(e) {
