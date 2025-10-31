@@ -31,6 +31,13 @@ let baseAliments = [
   { nom: "Pain", points: 3, favori: true }
 ];
 
+// 🔹 Initialisation si rien n'est encore enregistré
+if (!localStorage.getItem('baseAliments')) {
+  localStorage.setItem('baseAliments', JSON.stringify(baseAliments));
+  console.log("Base initiale enregistrée dans localStorage");
+}
+
+// 🔹 Chargement depuis localStorage si disponible
 const sauvegarde = localStorage.getItem('baseAliments');
 if (sauvegarde) {
   const parsed = JSON.parse(sauvegarde);
@@ -39,7 +46,9 @@ if (sauvegarde) {
   }
 }
 
-mettreAJourListeDeroulante(); // ← met à jour la datalist
+// 🔹 Mise à jour de la datalist
+mettreAJourListeDeroulante();
+
 
 // Chargement des données depuis localStorage
 if (localStorage.getItem('historique')) {
