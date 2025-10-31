@@ -27,10 +27,11 @@ let historique = {};
 let poidsHistorique = [];
 let baseAliments = [
   { nom: "Pomme", points: 0, favori: true },
-  { nom: "Banane", points: 0, favori: false },
+  { nom: "Banane", points: 1, favori: false },
   { nom: "Pain", points: 3, favori: true }
 ];
-
+  console.log("Datalist mise à jour");
+}
 
 // Chargement des données depuis localStorage
 if (localStorage.getItem('historique')) {
@@ -499,6 +500,7 @@ window.addEventListener('load', () => {
   const chargement = document.getElementById('chargement');
   if (chargement) chargement.style.display = 'none';
 });
+
 
 
 
