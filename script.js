@@ -51,6 +51,9 @@ if (localStorage.getItem('baseAliments')) {
   baseAliments = JSON.parse(localStorage.getItem('baseAliments'));
 }
 
+mettreAJourListeDeroulante();
+
+
 // Enregistrement du service worker pour installation mobile (PWA)
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('service-worker.js')
@@ -299,6 +302,11 @@ function mettreAJourListeDeroulante() {
   const ulJour = document.getElementById('liste-aliments-jour');
   datalist.innerHTML = '';
 
+	  baseAliments.forEach(aliment => {
+    const option = document.createElement('option');
+    option.value = aliment.nom;
+    datalist.appendChild(option);
+		  
   // 🧠 Tri : favoris d’abord, puis ordre alphabétique
   const alimentsTries = [...baseAliments]
     .sort((a, b) => {
@@ -490,4 +498,5 @@ window.addEventListener('load', () => {
   const chargement = document.getElementById('chargement');
   if (chargement) chargement.style.display = 'none';
 });
+
 
