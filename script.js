@@ -49,10 +49,9 @@ if (localStorage.getItem('poidsHistorique')) {
 
 if (localStorage.getItem('baseAliments')) {
   baseAliments = JSON.parse(localStorage.getItem('baseAliments'));
+  console.log("Base chargée :", baseAliments); // ← vérifie le contenu
+  mettreAJourListeDeroulante();
 }
-
-mettreAJourListeDeroulante();
-
 
 // Enregistrement du service worker pour installation mobile (PWA)
 if ('serviceWorker' in navigator) {
@@ -299,7 +298,7 @@ function afficherPoidsListe() {
 
 // Liste déroulante des aliments
 function mettreAJourListeDeroulante() {
-  const ulJour = document.getElementById('liste-aliments-jour');
+  const datalist = document.getElementById('liste-aliments-jour');
   datalist.innerHTML = '';
 
 	  baseAliments.forEach(aliment => {
@@ -498,5 +497,6 @@ window.addEventListener('load', () => {
   const chargement = document.getElementById('chargement');
   if (chargement) chargement.style.display = 'none';
 });
+
 
 
