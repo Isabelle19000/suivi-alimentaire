@@ -1,6 +1,6 @@
 // Sélection des éléments HTML
 const form = document.getElementById('form-aliment');
-const liste = document.getElementById('liste-aliments');
+const liste = document.getElementById('liste-aliments-jour');
 const totalPoints = document.getElementById('total-points');
 const resetButton = document.getElementById('reset');
 const historiqueDiv = document.getElementById('historique');
@@ -296,7 +296,7 @@ function afficherPoidsListe() {
 
 // Liste déroulante des aliments
 function mettreAJourListeDeroulante() {
-  const datalist = document.getElementById('liste-aliments');
+  const ulJour = document.getElementById('liste-aliments-jour');
   datalist.innerHTML = '';
 
   // 🧠 Tri : favoris d’abord, puis ordre alphabétique
