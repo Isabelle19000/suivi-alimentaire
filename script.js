@@ -367,12 +367,37 @@ nomSelect.addEventListener('change', function () {
 
 
 // Ajout d’un aliment à la base
+// ✅ Ajout d’un aliment à la base
 formAjout.addEventListener('submit', function(e) {
   e.preventDefault();
-  const formModif = document.getElementById('form-modif-aliment');
-const modifNom = document.getElementById('modif-nom');
-const modifPoints = document.getElementById('modif-points');
+  const nom = nouvelAliment.value.trim();
+  const points = parseFloat(nouveauxPoints.value);
 
+  if (nom && !isNaN(points)) {
+    const alimentExistant = baseAliments.find(
+      a => a.nom.toLowerCase() === nom.toLowerCase()
+    );
+
+    if (alimentExistant) {
+      // Met à jour les points si l’aliment existe déjà
+      alimentExistant.points = points;
+      alert(`L'aliment "${nom}" a été mis à jour.`);
+    } else {
+      // Ajoute un nouvel aliment
+      baseAliments.push({ nom, points, favori: false });
+      alert(`L'aliment "${nom}" a été ajouté.`);
+    }
+
+    localStorage.setItem('baseAliments', JSON.stringify(baseAliments));
+    mettreAJourListeDeroulante();
+    afficherBaseAliments();
+    formAjout.reset();
+  } else {
+    alert("Merci de saisir un nom et des points valides.");
+  }
+});
+
+// ✅ Modification d’un aliment via formulaire dédié
 formModif.addEventListener('submit', function(e) {
   e.preventDefault();
   const nom = modifNom.value.trim();
@@ -388,17 +413,6 @@ formModif.addEventListener('submit', function(e) {
     formModif.reset();
   } else {
     alert("Aliment introuvable ou points invalides.");
-  }
-});
-
-  const nom = nouvelAliment.value.trim();
-  const points = parseFloat(nouveauxPoints.value);
-
-  if (nom && !isNaN(points)) {
-    baseAliments.push({ nom, points, favori: false });
-    localStorage.setItem('baseAliments', JSON.stringify(baseAliments));
-    mettreAJourListeDeroulante();
-    formAjout.reset();
   }
 });
 
