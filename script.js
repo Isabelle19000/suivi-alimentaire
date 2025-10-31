@@ -298,7 +298,7 @@ function afficherPoidsListe() {
 
 // Liste déroulante des aliments
 function mettreAJourListeDeroulante() {
-  const datalist = document.getElementById('liste-aliments-jour');
+  const datalist = document.getElementById('liste-aliments');
   datalist.innerHTML = '';
 
 	  baseAliments.forEach(aliment => {
@@ -497,6 +497,7 @@ window.addEventListener('load', () => {
   const chargement = document.getElementById('chargement');
   if (chargement) chargement.style.display = 'none';
 });
+
 
 
 
