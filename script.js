@@ -4,7 +4,6 @@ let baseAliments = [
   { nom: "Banane", points: 1 },
   { nom: "Pain", points: 3 }
 ];
-console.log("BaseAliments :", baseAliments);
 
 // Ciblage des éléments
 const form = document.getElementById('form-aliment');
@@ -59,4 +58,5 @@ form.addEventListener('submit', function(e) {
 
 // Initialisation
 mettreAJourListeDeroulante();
+
 
