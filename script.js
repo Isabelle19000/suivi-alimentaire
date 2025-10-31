@@ -318,21 +318,35 @@ function afficherBaseAliments() {
     return a.nom.localeCompare(b.nom, 'fr', { sensitivity: 'base' });
   });
 
-  alimentsTries.forEach(aliment => {
+  alimentsTries.forEach((aliment, index) => {
     const li = document.createElement('li');
     li.textContent = `${aliment.nom} - ${aliment.points} pts `;
 
+    // ⭐ Étoile favori
     const etoile = document.createElement('span');
     etoile.textContent = aliment.favori ? '⭐' : '☆';
     etoile.style.cursor = 'pointer';
     etoile.style.marginLeft = '10px';
-
     etoile.addEventListener('click', () => {
       basculerFavori(aliment.nom);
       afficherBaseAliments();
     });
 
+    // 🗑️ Bouton supprimer
+    const btnSupprimer = document.createElement('button');
+    btnSupprimer.textContent = '🗑️';
+    btnSupprimer.style.marginLeft = '10px';
+    btnSupprimer.addEventListener('click', () => {
+      if (confirm(`Supprimer "${aliment.nom}" de la base ?`)) {
+        baseAliments.splice(index, 1);
+        localStorage.setItem('baseAliments', JSON.stringify(baseAliments));
+        mettreAJourListeDeroulante();
+        afficherBaseAliments();
+      }
+    });
+
     li.appendChild(etoile);
+    li.appendChild(btnSupprimer);
     ul.appendChild(li);
   });
 }
