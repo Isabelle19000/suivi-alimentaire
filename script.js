@@ -1,23 +1,27 @@
-// 🔗 Sélection des éléments HTML
+// Sélection des éléments HTML
 const form = document.getElementById('form-aliment');
 const liste = document.getElementById('liste-aliments');
 const totalPoints = document.getElementById('total-points');
 const resetButton = document.getElementById('reset');
 const historiqueDiv = document.getElementById('historique');
+
 const poidsForm = document.getElementById('form-poids');
 const poidsInput = document.getElementById('poids');
 const poidsChartCanvas = document.getElementById('poidsChart');
 const listePoids = document.getElementById('liste-poids');
 const resetAllButton = document.getElementById('reset-all');
+
 const nomSelect = document.getElementById('nom');
 const pointsInput = document.getElementById('points');
+
 const formAjout = document.getElementById('form-ajout-aliment');
 const nouvelAliment = document.getElementById('nouvel-aliment');
 const nouveauxPoints = document.getElementById('nouveaux-points');
+
 const exportBtn = document.getElementById('export-base');
 const importInput = document.getElementById('import-base');
 
-// 📦 Données
+// Données
 let total = 0;
 let historique = {};
 let poidsHistorique = [];
@@ -27,23 +31,35 @@ let baseAliments = [
   { nom: "Pain", points: 3, favori: true }
 ];
 
-// 💾 Chargement depuis localStorage
+
+// Chargement des données depuis localStorage
 if (localStorage.getItem('historique')) {
   historique = JSON.parse(localStorage.getItem('historique'));
   afficherHistorique();
 }
+
 if (localStorage.getItem('totalPoints')) {
   total = parseFloat(localStorage.getItem('totalPoints'));
   totalPoints.textContent = total;
 }
+
 if (localStorage.getItem('poidsHistorique')) {
   poidsHistorique = JSON.parse(localStorage.getItem('poidsHistorique'));
 }
+
 if (localStorage.getItem('baseAliments')) {
   baseAliments = JSON.parse(localStorage.getItem('baseAliments'));
 }
 
-// 📊 Initialisation du graphique
+// Enregistrement du service worker pour installation mobile (PWA)
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('service-worker.js')
+    .then(() => console.log('Service Worker enregistré'))
+    .catch(err => console.error('Erreur SW:', err));
+}
+
+
+// Initialisation du graphique
 let poidsData = {
   labels: [],
   datasets: [{
@@ -55,35 +71,138 @@ let poidsData = {
     tension: 0.3
   }]
 };
+
 let poidsChart = new Chart(poidsChartCanvas, {
   type: 'line',
   data: poidsData,
   options: {
     responsive: true,
-    scales: { y: { beginAtZero: false } }
+    scales: {
+      y: {
+        beginAtZero: false
+      }
+    }
   }
 });
 
-// 🧠 Fonctions utilitaires
-function mettreAJourListeDeroulante() {
-  const datalist = document.getElementById('liste-aliments');
-  datalist.innerHTML = '';
-  const alimentsTries = [...baseAliments].sort((a, b) =>
-    a.nom.localeCompare(b.nom, 'fr', { sensitivity: 'base' })
-  );
-  alimentsTries.forEach(aliment => {
-    const option = document.createElement('option');
-    option.value = aliment.nom;
-    datalist.appendChild(option);
-  });
-  suggereAliments();
-}
-function suggereAliments() {
-  const suggestions = baseAliments.filter(a => a.points === 0);
-  if (suggestions.length > 0) {
-    alert("Suggestions à 0 point :\n" + suggestions.map(a => a.nom).join('\n'));
+mettreAJourGraphique();
+afficherPoidsListe();
+mettreAJourListeDeroulante();
+afficherBaseAliments();
+
+
+// Ajout d’un aliment à la journée
+form.addEventListener('submit', function(e) {
+  e.preventDefault();
+
+  // 🔍 Récupération du nom saisi et recherche dans la base
+  const nom = nomSelect.value.trim();
+  const aliment = baseAliments.find(a => a.nom.toLowerCase() === nom.toLowerCase());
+
+  // 🧮 Récupération des points (saisis ou automatiques)
+  let points = parseFloat(pointsInput.value);
+  if (aliment && isNaN(points)) {
+    points = aliment.points;
   }
-}
+
+  // 📅 Date du jour pour l’historique
+  const date = new Date().toLocaleDateString('fr-FR');
+
+  // ✅ Vérification que les données sont valides
+  if (nom && !isNaN(points)) {
+
+    // 📝 Création de l’élément à afficher dans la liste
+    const li = document.createElement('li');
+    li.textContent = `${nom} - ${points} points`;
+
+    // ❌ Bouton de suppression
+    const btnSupprimer = document.createElement('button');
+    btnSupprimer.textContent = 'Supprimer';
+    btnSupprimer.className = 'btn-supprimer';
+
+    // 🗑️ Gestion de la suppression
+    btnSupprimer.addEventListener('click', function() {
+      liste.removeChild(li);
+      total -= points;
+      totalPoints.textContent = total;
+
+      const index = historique[date].findIndex(item => item.nom === nom && item.points === points);
+      if (index !== -1) {
+        historique[date].splice(index, 1);
+      }
+
+      afficherHistorique();
+      localStorage.setItem('historique', JSON.stringify(historique));
+      localStorage.setItem('totalPoints', total);
+    });
+
+    // ➕ Ajout à la liste visible
+    li.appendChild(btnSupprimer);
+    liste.appendChild(li);
+
+    // 🔢 Mise à jour du total
+    total += points;
+    totalPoints.textContent = total;
+    document.getElementById('barre-objectif').value = total;
+
+    // 🗃️ Ajout à l’historique
+    if (!historique[date]) {
+      historique[date] = [];
+    }
+    historique[date].push({ nom, points });
+
+    // 💾 Sauvegarde et mise à jour de l’affichage
+    afficherHistorique();
+    localStorage.setItem('historique', JSON.stringify(historique));
+    localStorage.setItem('totalPoints', total);
+
+    // 🔄 Réinitialisation du formulaire
+    form.reset();
+  } else {
+    alert("Merci de choisir un aliment valide et de renseigner les points.");
+  }
+});
+
+  
+
+
+// Réinitialisation de la journée
+resetButton.addEventListener('click', function() {
+  liste.innerHTML = '';
+  total = 0;
+  totalPoints.textContent = total;
+  historique = {};
+  afficherHistorique();
+  localStorage.removeItem('historique');
+  localStorage.removeItem('totalPoints');
+});
+
+// Réinitialisation complète
+resetAllButton.addEventListener('click', function () {
+  const confirmation = confirm("⚠️ Cette action va effacer toutes les données. Continuer ?");
+  if (!confirmation) return;
+
+  liste.innerHTML = '';
+  total = 0;
+  totalPoints.textContent = total;
+  historique = {};
+  afficherHistorique();
+
+  poidsHistorique = [];
+  mettreAJourGraphique();
+  afficherPoidsListe();
+
+  baseAliments = [
+    { nom: "Pomme", points: 0 },
+    { nom: "Banane", points: 2 },
+    { nom: "Pain complet", points: 3 }
+  ];
+  mettreAJourListeDeroulante();
+
+  localStorage.clear();
+});
+
+// Historique alimentaire
 function afficherHistorique() {
   historiqueDiv.innerHTML = '';
   for (const date in historique) {
@@ -98,12 +217,16 @@ function afficherHistorique() {
     section.appendChild(ul);
     historiqueDiv.appendChild(section);
   }
-  afficherCalendrier();
+	 afficherCalendrier();
 }
+
+// Afficher calendrier
 function afficherCalendrier() {
   const calendrier = document.getElementById('calendrier');
   calendrier.innerHTML = '';
-  Object.keys(historique).forEach(date => {
+
+  const dates = Object.keys(historique);
+  dates.forEach(date => {
     const bouton = document.createElement('button');
     bouton.textContent = date;
     bouton.style.margin = '5px';
@@ -116,52 +239,105 @@ function afficherCalendrier() {
     calendrier.appendChild(bouton);
   });
 }
+
+// Ajout d’un poids
+poidsForm.addEventListener('submit', function(e) {
+  e.preventDefault();
+  const poids = parseFloat(poidsInput.value);
+  const date = new Date().toLocaleDateString('fr-FR');
+
+  if (!isNaN(poids)) {
+    poidsHistorique.push({ date, poids });
+    localStorage.setItem('poidsHistorique', JSON.stringify(poidsHistorique));
+    mettreAJourGraphique();
+    afficherPoidsListe();
+    poidsForm.reset();
+  }
+});
+
+// Mise à jour du graphique
 function mettreAJourGraphique() {
   poidsData.labels = poidsHistorique.map(item => item.date);
   poidsData.datasets[0].data = poidsHistorique.map(item => item.poids);
   poidsChart.update();
 }
+
+// Liste des poids
 function afficherPoidsListe() {
   listePoids.innerHTML = '';
   poidsHistorique.forEach((item, index) => {
     const li = document.createElement('li');
     li.textContent = `${item.date} : ${item.poids} kg`;
+
     const btnSupprimer = document.createElement('button');
     btnSupprimer.textContent = 'Supprimer';
     btnSupprimer.className = 'btn-supprimer';
-    btnSupprimer.addEventListener('click', () => {
+
+    btnSupprimer.addEventListener('click', function () {
       poidsHistorique.splice(index, 1);
       localStorage.setItem('poidsHistorique', JSON.stringify(poidsHistorique));
       mettreAJourGraphique();
       afficherPoidsListe();
     });
+
     li.appendChild(btnSupprimer);
     listePoids.appendChild(li);
   });
 }
+
+// Liste déroulante des aliments
+function mettreAJourListeDeroulante() {
+  const datalist = document.getElementById('liste-aliments');
+  datalist.innerHTML = '';
+
+  // 🧠 Tri : favoris d’abord, puis ordre alphabétique
+  const alimentsTries = [...baseAliments]
+    .sort((a, b) => {
+      if (a.favori && !b.favori) return -1;
+      if (!a.favori && b.favori) return 1;
+      return a.nom.localeCompare(b.nom, 'fr', { sensitivity: 'base' });
+    });
+
+  // 📝 Remplissage du datalist
+  alimentsTries.forEach(aliment => {
+    const option = document.createElement('option');
+    option.value = aliment.nom;
+    datalist.appendChild(option);
+  });
+
+  suggereAliments();
+}
+// ⭐ Affiche la base d'aliments avec étoiles cliquables
 function afficherBaseAliments() {
   const ul = document.getElementById('liste-base-aliments');
   ul.innerHTML = '';
+
   const alimentsTries = [...baseAliments].sort((a, b) => {
     if (a.favori && !b.favori) return -1;
     if (!a.favori && b.favori) return 1;
     return a.nom.localeCompare(b.nom, 'fr', { sensitivity: 'base' });
   });
+
   alimentsTries.forEach(aliment => {
     const li = document.createElement('li');
     li.textContent = `${aliment.nom} - ${aliment.points} pts `;
+
     const etoile = document.createElement('span');
     etoile.textContent = aliment.favori ? '⭐' : '☆';
     etoile.style.cursor = 'pointer';
     etoile.style.marginLeft = '10px';
+
     etoile.addEventListener('click', () => {
       basculerFavori(aliment.nom);
       afficherBaseAliments();
     });
+
     li.appendChild(etoile);
     ul.appendChild(li);
   });
 }
+
+// ⭐ Basculer un aliment en favori
 function basculerFavori(nom) {
   const aliment = baseAliments.find(a => a.nom === nom);
   if (aliment) {
@@ -171,52 +347,78 @@ function basculerFavori(nom) {
   }
 }
 
-// 🚀 Initialisation
-mettreAJourGraphique();
-afficherPoidsListe();
-mettreAJourListeDeroulante();
-afficherBaseAliments();
+// Suggere des aliment à 0 pts
+function suggereAliments() {
+  const suggestions = baseAliments.filter(a => a.points === 0);
+  if (suggestions.length > 0) {
+    alert("Suggestions à 0 point :\n" + suggestions.map(a => a.nom).join('\n'));
+  }
+}
 
-// 🧩 Événements
-form.addEventListener('submit', function(e) {
-  e.preventDefault();
-  const nom = nomSelect.value.trim();
-  const aliment = baseAliments.find(a => a.nom.toLowerCase() === nom.toLowerCase());
-  let points = parseFloat(pointsInput.value);
-  if (aliment && isNaN(points)) points = aliment.points;
-  const date = new Date().toLocaleDateString('fr-FR');
-  if (nom && !isNaN(points)) {
-    const li = document.createElement('li');
-    li.textContent = `${nom} - ${points} points`;
-    const btnSupprimer = document.createElement('button');
-    btnSupprimer.textContent = 'Supprimer';
-    btnSupprimer.className = 'btn-supprimer';
-    btnSupprimer.addEventListener('click', function() {
-      liste.removeChild(li);
-      total -= points;
-      totalPoints.textContent = total;
-      const index = historique[date].findIndex(item => item.nom === nom && item.points === points);
-      if (index !== -1) historique[date].splice(index, 1);
-      afficherHistorique();
-      localStorage.setItem('historique', JSON.stringify(historique));
-      localStorage.setItem('totalPoints', total);
-    });
-    li.appendChild(btnSupprimer);
-    liste.appendChild(li);
-    total += points;
-    totalPoints.textContent = total;
-    document.getElementById('barre-objectif').value = total;
-    if (!historique[date]) historique[date] = [];
-    historique[date].push({ nom, points });
-    afficherHistorique();
-    localStorage.setItem('historique', JSON.stringify(historique));
-    localStorage.setItem('totalPoints', total);
-    form.reset();
+// Auto-remplissage des points
+nomSelect.addEventListener('change', function () {
+  const alimentChoisi = baseAliments.find(item => item.nom === nomSelect.value);
+  if (alimentChoisi) {
+    pointsInput.value = alimentChoisi.points;
   } else {
-    alert("Merci de choisir un aliment valide et de renseigner les points.");
+    pointsInput.value = '';
   }
 });
-resetButton.addEventListener('click', function() {
-  liste.innerHTML = '';
-  total = 0;
-  totalPoints.textContent
+
+
+// Ajout d’un aliment à la base
+formAjout.addEventListener('submit', function(e) {
+  e.preventDefault();
+  const nom = nouvelAliment.value.trim();
+  const points = parseFloat(nouveauxPoints.value);
+
+  if (nom && !isNaN(points)) {
+    baseAliments.push({ nom, points, favori: false });
+    localStorage.setItem('baseAliments', JSON.stringify(baseAliments));
+    mettreAJourListeDeroulante();
+    formAjout.reset();
+  }
+});
+
+
+// Exporter la base
+exportBtn.addEventListener('click', function () {
+  const dataStr = JSON.stringify(baseAliments, null, 2);
+  const blob = new Blob([dataStr], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = "base-aliments.json";
+  a.click();
+  URL.revokeObjectURL(url);
+});
+
+// Importer la base
+importInput.addEventListener('change', function () {
+  const file = importInput.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function (e) {
+    try {
+      const importedData = JSON.parse(e.target.result);
+      if (Array.isArray(importedData)) {
+        baseAliments = importedData;
+        localStorage.setItem('baseAliments', JSON.stringify(baseAliments));
+        mettreAJourListeDeroulante();
+        alert("✅ Base importée avec succès !");
+      } else {
+        alert("❌ Format de fichier invalide.");
+      }
+    } catch (err) {
+      alert("❌ Erreur lors de l'importation : " + err.message);
+    }
+  };
+  reader.readAsText(file);
+});
+
+window.addEventListener('load', () => {
+  const chargement = document.getElementById('chargement');
+  if (chargement) chargement.style.display = 'none';
+});
+
