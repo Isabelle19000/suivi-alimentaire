@@ -95,15 +95,24 @@ afficherBaseAliments();
 form.addEventListener('submit', function(e) {
   e.preventDefault();
 
-  // 🔍 Récupération du nom saisi et recherche dans la base
   const nom = nomSelect.value.trim();
   const aliment = baseAliments.find(a => a.nom.toLowerCase() === nom.toLowerCase());
-
-  // 🧮 Récupération des points (saisis ou automatiques)
   let points = parseFloat(pointsInput.value);
-  if (aliment && isNaN(points)) {
+
+  // Si l'utilisateur n'a pas saisi de points, on prend ceux de la base
+  if (isNaN(points) && aliment) {
     points = aliment.points;
   }
+
+  // Si toujours invalide, on bloque
+  if (!nom || isNaN(points)) {
+    alert("Merci de choisir un aliment valide et de renseigner les points.");
+    return;
+  }
+
+  // ... (le reste de ton code pour ajouter à la liste, mettre à jour le total, etc.)
+});
+
 
   // 📅 Date du jour pour l’historique
   const date = new Date().toLocaleDateString('fr-FR');
@@ -465,6 +474,16 @@ importInput.addEventListener('change', function () {
     }
   };
   reader.readAsText(file);
+});
+
+nomSelect.addEventListener('change', () => {
+  const nom = nomSelect.value.trim();
+  const aliment = baseAliments.find(a => a.nom.toLowerCase() === nom.toLowerCase());
+  if (aliment) {
+    pointsInput.value = aliment.points;
+  } else {
+    pointsInput.value = '';
+  }
 });
 
 window.addEventListener('load', () => {
