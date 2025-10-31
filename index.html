@@ -2,27 +2,103 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Test Datalist Aliments</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Suivi alimentaire et poids</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-  <h1>Ajouter un aliment à la journée</h1>
-  
-<datalist id="liste-aliments"></datalist>
 
-  <form id="form-aliment">
-    <input type="text" id="nom" list="liste-aliments" placeholder="Tape un aliment..." required>
-    <datalist id="liste-aliments"></datalist>
+	<div id="chargement" style="text-align:center; padding:20px;">
+  <p>Chargement de l'application...</p>
+</div>
 
-    <input type="number" id="points" placeholder="Points" step="0.1">
+  <header>
+    <h1>Mon suivi alimentaire et poids</h1>
+  </header>
+
+  <main>
+
+    <section>
+      <h2>Ajouter un aliment à la journée</h2>
+      <form id="form-aliment">
+		<input type="text" id="nom" list="liste-aliments" placeholder="Tape un aliment..." required>
+		<datalist id="liste-aliments"></datalist>
+
+
+
+        <input type="number" id="points" placeholder="Points" step="0.1" required>
+        <button type="submit">Ajouter</button>
+      </form>
+     <ul id="liste-aliments-jour"></ul>
+      <p>Total de points : <span id="total-points">0</span></p>
+	  <p>Objectif : 23 points</p>
+		<progress id="barre-objectif" value="0" max="23"></progress>
+      <button id="reset">Réinitialiser la journée</button>
+    </section>
+
+	<section>
+  <h2>Gestion de la base d'aliments</h2>
+
+  <!-- Ajout d'un aliment -->
+  <form id="form-ajout-aliment">
+    <input type="text" id="nouvel-aliment" placeholder="Nom de l'aliment" required>
+    <input type="number" id="nouveaux-points" placeholder="Points" step="0.1" required>
     <button type="submit">Ajouter</button>
   </form>
 
-  <h2>Aliments ajoutés</h2>
-  <ul id="liste-jour"></ul>
+  <!-- Modification d'un aliment -->
+  <form id="form-modif-aliment">
+    <input type="text" id="modif-nom" placeholder="Nom à modifier" required />
+    <input type="number" id="modif-points" placeholder="Nouveaux points" step="0.1" required />
+    <button type="submit">Modifier</button>
+  </form>
+
+  <!-- Export / Import -->
+  <button id="export-base">Exporter la base</button>
+  <input type="file" id="import-base" accept=".json">
+</section>
+
+
+    <section>
+      <h2>Mes aliments</h2>
+      <ul id="liste-base-aliments"></ul>
+    </section>
+
+    <section>
+      <h2>Historique alimentaire</h2>
+      <div id="historique"></div>
+    </section>
+
+	<section>
+		<h2>Calendrier de suivi</h2>
+		<div id="calendrier"></div>
+	</section>
+
+    <section>
+      <h2>Suivi du poids</h2>
+      <form id="form-poids">
+        <input type="number" id="poids" placeholder="Poids (kg)" step="0.1" required>
+        <button type="submit">Ajouter</button>
+      </form>
+      <ul id="liste-poids"></ul>
+      <canvas id="poidsChart"></canvas>
+    </section>
+
+    <section>
+      <h2>Réinitialisation complète</h2>
+      <button id="reset-all">Effacer toutes les données</button>
+    </section>
+
+  </main>
+
+  <footer>
+    <p>&copy; 2025 - Suivi personnel</p>
+  </footer>
 
   <script src="script.js"></script>
 </body>
 </html>
-
 
 
