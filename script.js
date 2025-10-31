@@ -31,6 +31,10 @@ let baseAliments = [
   { nom: "Pain", points: 3, favori: true }
 ];
 
+if (localStorage.getItem('baseAliments')) {
+  baseAliments = JSON.parse(localStorage.getItem('baseAliments'));
+}
+mettreAJourListeDeroulante(); // ← met à jour la datalist
 
 // Chargement des données depuis localStorage
 if (localStorage.getItem('historique')) {
@@ -47,10 +51,6 @@ if (localStorage.getItem('poidsHistorique')) {
   poidsHistorique = JSON.parse(localStorage.getItem('poidsHistorique'));
 }
 
-if (localStorage.getItem('baseAliments')) {
-  baseAliments = JSON.parse(localStorage.getItem('baseAliments'));
-}
-mettreAJourListeDeroulante(); // ← met à jour la datalist
 
 // Auto-remplir les points quand on tape ou sélectionne un aliment
 const nomInput = document.getElementById('nom');
@@ -328,6 +328,7 @@ function mettreAJourListeDeroulante() {
   });
 }
 
+  console.log("Datalist mise à jour :", baseAliments);
 		  
   // 🧠 Tri : favoris d’abord, puis ordre alphabétique
   const alimentsTries = [...baseAliments]
