@@ -1,147 +1,32 @@
-/* Structure générale */
 body {
-  font-family: Arial, sans-serif;
-  margin: 10px;
+  font-family: sans-serif;
+  margin: 20px;
   background-color: #f9f9f9;
-  color: #333;
 }
-
-header, footer {
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-main {
-  max-width: 800px;
-  margin: auto;
-}
-
-/* Titres */
-h1 {
-  font-size: 2em;
-  margin-bottom: 10px;
-}
-
-h2 {
-  margin-top: 30px;
-  font-size: 1.4em;
-  border-bottom: 1px solid #ccc;
-  padding-bottom: 5px;
-}
-
-h3 {
-  margin-top: 20px;
-  font-size: 1.2em;
-}
-
-/* Formulaires */
 form {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
 }
-
-input, select, button {
-  padding: 10px;
-  font-size: 1em;
-  border-radius: 5px;
-  border: 1px solid #ccc;
+input, button {
+  margin: 5px;
+  padding: 8px;
 }
-
-input[type="file"] {
-  padding: 5px;
-}
-
-button {
-  background-color: #007bff;
-  color: white;
-  border: none;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-button:hover {
-  background-color: #0056b3;
-}
-
-/* Listes */
 ul {
-  padding-left: 20px;
+  list-style: none;
+  padding-left: 0;
 }
-
 li {
   margin-bottom: 5px;
 }
-
-/* Bouton supprimer */
 .btn-supprimer {
   margin-left: 10px;
-  background-color: #f44336;
-  color: white;
-  border: none;
-  padding: 4px 8px;
+  color: red;
   cursor: pointer;
-  border-radius: 4px;
-  font-size: 0.9em;
 }
-
-.btn-supprimer:hover {
-  background-color: #d32f2f;
+progress {
+  width: 100%;
+  height: 20px;
 }
-
-/* Graphique */
 canvas {
   max-width: 100%;
-  height: auto;
   margin-top: 20px;
 }
-
-/* Responsive */
-@media (max-width: 600px) {
-  body {
-    font-size: 16px;
-  }
-
-  h1 {
-    font-size: 1.6em;
-  }
-
-  h2 {
-    font-size: 1.2em;
-  }
-
-  form {
-    gap: 8px;
-  }
-
-  input, select, button {
-    font-size: 1em;
-  }
-}
-
-@media (prefers-color-scheme: dark) {
-  body {
-    background-color: #1e1e1e;
-    color: #f0f0f0;
-  }
-
-  input, select, button {
-    background-color: #333;
-    color: #f0f0f0;
-    border: 1px solid #555;
-  }
-
-  button:hover {
-    background-color: #555;
-  }
-
-  .btn-supprimer {
-    background-color: #c62828;
-  }
-
-  .btn-supprimer:hover {
-    background-color: #b71c1c;
-  }
-}
-
