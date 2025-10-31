@@ -1,16 +1,14 @@
-const CACHE_NAME = 'suivi-cache-v1';
-const URLS_TO_CACHE = [
-  'index.html',
-  'style.css',
-  'script.js',
-  'manifest.json',
-  'icon.png'
-];
-
 self.addEventListener('install', event => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => {
-      return cache.addAll(URLS_TO_CACHE);
+    caches.open('v1').then(cache => {
+      return cache.addAll([
+        '/',
+        '/index.html',
+        '/style.css',
+        '/script.js',
+        '/icon.png',
+        '/manifest.json'
+      ]);
     })
   );
 });
