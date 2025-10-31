@@ -23,6 +23,11 @@ function mettreAJourListeDeroulante() {
   });
 }
 
+window.addEventListener('DOMContentLoaded', () => {
+  mettreAJourListeDeroulante();
+});
+
+
 // Auto-remplir les points quand on sélectionne un aliment
 nomInput.addEventListener('input', () => {
   const nom = nomInput.value.trim().toLowerCase();
@@ -59,3 +64,4 @@ form.addEventListener('submit', function(e) {
 
 // Initialisation
 mettreAJourListeDeroulante();
+
