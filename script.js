@@ -1,13 +1,11 @@
-// Base d'aliments
-let baseAliments = [
+// Base d'aliments en mémoire
+const baseAliments = [
   { nom: "Pomme", points: 0 },
   { nom: "Banane", points: 1 },
-  { nom: "Pain", points: 3 }
+  { nom: "Pain", points: 3 },
+  { nom: "Kiwi", points: 2 }
 ];
-console.log("BaseAliments :", baseAliments);
-if (localStorage.getItem('baseAliments')) {
-  baseAliments = JSON.parse(localStorage.getItem('baseAliments'));
-}
+
 // Ciblage des éléments
 const form = document.getElementById('form-aliment');
 const nomInput = document.getElementById('nom');
@@ -26,9 +24,9 @@ function mettreAJourListeDeroulante() {
 }
 
 // Auto-remplir les points quand on sélectionne un aliment
-nomInput.addEventListener('change', () => {
-  const nom = nomInput.value.trim();
-  const aliment = baseAliments.find(a => a.nom.toLowerCase() === nom.toLowerCase());
+nomInput.addEventListener('input', () => {
+  const nom = nomInput.value.trim().toLowerCase();
+  const aliment = baseAliments.find(a => a.nom.toLowerCase().startsWith(nom));
   if (aliment) {
     pointsInput.value = aliment.points;
   } else {
@@ -61,4 +59,3 @@ form.addEventListener('submit', function(e) {
 
 // Initialisation
 mettreAJourListeDeroulante();
-
