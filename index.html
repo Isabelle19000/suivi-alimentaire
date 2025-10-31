@@ -36,6 +36,29 @@
       <button id="reset">Réinitialiser la journée</button>
     </section>
 
+	<section>
+  <h2>Gestion de la base d'aliments</h2>
+
+  <!-- Ajout d'un aliment -->
+  <form id="form-ajout-aliment">
+    <input type="text" id="nouvel-aliment" placeholder="Nom de l'aliment" required>
+    <input type="number" id="nouveaux-points" placeholder="Points" step="0.1" required>
+    <button type="submit">Ajouter</button>
+  </form>
+
+  <!-- Modification d'un aliment -->
+  <form id="form-modif-aliment">
+    <input type="text" id="modif-nom" placeholder="Nom à modifier" required />
+    <input type="number" id="modif-points" placeholder="Nouveaux points" step="0.1" required />
+    <button type="submit">Modifier</button>
+  </form>
+
+  <!-- Export / Import -->
+  <button id="export-base">Exporter la base</button>
+  <input type="file" id="import-base" accept=".json">
+</section>
+
+
     <section>
       <h2>Mes aliments</h2>
       <ul id="liste-base-aliments"></ul>
@@ -50,17 +73,6 @@
 		<h2>Calendrier de suivi</h2>
 		<div id="calendrier"></div>
 	</section>
-
-    <section>
-      <h2>Ajouter un aliment à la base</h2>
-      <form id="form-ajout-aliment">
-        <input type="text" id="nouvel-aliment" placeholder="Nom de l'aliment" required>
-        <input type="number" id="nouveaux-points" placeholder="Points" step="0.1" required>
-        <button type="submit">Ajouter</button>
-      </form>
-      <button id="export-base">Exporter la base</button>
-      <input type="file" id="import-base" accept=".json">
-    </section>
 
     <section>
       <h2>Suivi du poids</h2>
