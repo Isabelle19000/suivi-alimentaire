@@ -498,6 +498,11 @@ window.addEventListener('load', () => {
   if (chargement) chargement.style.display = 'none';
 });
 
+window.addEventListener('load', () => {
+  console.log("Chargement terminé");
+  mettreAJourListeDeroulante();
+});
+
 
 
 
