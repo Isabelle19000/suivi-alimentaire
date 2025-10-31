@@ -5,7 +5,9 @@ let baseAliments = [
   { nom: "Pain", points: 3 }
 ];
 console.log("BaseAliments :", baseAliments);
-
+if (localStorage.getItem('baseAliments')) {
+  baseAliments = JSON.parse(localStorage.getItem('baseAliments'));
+}
 // Ciblage des éléments
 const form = document.getElementById('form-aliment');
 const nomInput = document.getElementById('nom');
@@ -59,3 +61,4 @@ form.addEventListener('submit', function(e) {
 
 // Initialisation
 mettreAJourListeDeroulante();
+
