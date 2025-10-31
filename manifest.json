@@ -1,10 +1,10 @@
 {
-  "name": "Suivi alimentaire",
-  "short_name": "Suivi",
+  "name": "Suivi des aliments",
+  "short_name": "Aliments",
   "start_url": "index.html",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#007bff",
+  "theme_color": "#4CAF50",
   "icons": [
     {
       "src": "icon.png",
