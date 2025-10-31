@@ -1,55 +1,87 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Suivi des aliments</title>
-  <link rel="manifest" href="manifest.json" />
-  <link rel="stylesheet" href="style.css" />
-  <link rel="icon" href="icon.png" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Suivi alimentaire et poids</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="style.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-  <h1>Suivi des aliments</h1>
 
-  <!-- Formulaire principal -->
-  <form id="form-aliment">
-    <input list="liste-aliments" id="nom" placeholder="Nom de l'aliment" />
-    <datalist id="liste-aliments"></datalist>
-    <input type="number" id="points" placeholder="Points" />
-    <button type="submit">Ajouter</button>
-  </form>
+	<div id="chargement" style="text-align:center; padding:20px;">
+  <p>Chargement de l'application...</p>
+</div>
 
-  <progress id="barre-objectif" max="100" value="0"></progress>
-  <p>Total : <span id="total-points">0</span> points</p>
-  <ul id="liste-aliments"></ul>
-  <button id="reset">Réinitialiser la journée</button>
+  <header>
+    <h1>Mon suivi alimentaire et poids</h1>
+  </header>
 
-  <!-- Historique -->
-  <div id="historique"></div>
-  <div id="calendrier"></div>
+  <main>
 
-  <!-- Poids -->
-  <form id="form-poids">
-    <input type="number" id="poids" placeholder="Poids (kg)" />
-    <button type="submit">Ajouter poids</button>
-  </form>
-  <canvas id="poidsChart"></canvas>
-  <ul id="liste-poids"></ul>
-  <button id="reset-all">Tout réinitialiser</button>
+    <section>
+      <h2>Ajouter un aliment à la journée</h2>
+      <form id="form-aliment">
+        <input type="text" id="nom" placeholder="Tape un aliment..." list="liste-aliments" required>
+		<datalist id="liste-aliments"></datalist>
 
-  <!-- Base d'aliments -->
-  <form id="form-ajout-aliment">
-    <input type="text" id="nouvel-aliment" placeholder="Nouvel aliment" />
-    <input type="number" id="nouveaux-points" placeholder="Points" />
-    <button type="submit">Ajouter à la base</button>
-  </form>
-  <button id="export-base">Exporter la base</button>
-  <input type="file" id="import-base" accept=".json" />
-  <section>
-    <h2>Mes aliments</h2>
-    <ul id="liste-base-aliments"></ul>
-  </section>
+        <input type="number" id="points" placeholder="Points" step="0.1" required>
+        <button type="submit">Ajouter</button>
+      </form>
+      <ul id="liste-aliments"></ul>
+      <p>Total de points : <span id="total-points">0</span></p>
+	  <p>Objectif : 23 points</p>
+		<progress id="barre-objectif" value="0" max="23"></progress>
+      <button id="reset">Réinitialiser la journée</button>
+    </section>
+
+    <section>
+      <h2>Mes aliments</h2>
+      <ul id="liste-base-aliments"></ul>
+    </section>
+
+    <section>
+      <h2>Historique alimentaire</h2>
+      <div id="historique"></div>
+    </section>
+
+	<section>
+		<h2>Calendrier de suivi</h2>
+		<div id="calendrier"></div>
+	</section>
+
+    <section>
+      <h2>Ajouter un aliment à la base</h2>
+      <form id="form-ajout-aliment">
+        <input type="text" id="nouvel-aliment" placeholder="Nom de l'aliment" required>
+        <input type="number" id="nouveaux-points" placeholder="Points" step="0.1" required>
+        <button type="submit">Ajouter</button>
+      </form>
+      <button id="export-base">Exporter la base</button>
+      <input type="file" id="import-base" accept=".json">
+    </section>
+
+    <section>
+      <h2>Suivi du poids</h2>
+      <form id="form-poids">
+        <input type="number" id="poids" placeholder="Poids (kg)" step="0.1" required>
+        <button type="submit">Ajouter</button>
+      </form>
+      <ul id="liste-poids"></ul>
+      <canvas id="poidsChart"></canvas>
+    </section>
+
+    <section>
+      <h2>Réinitialisation complète</h2>
+      <button id="reset-all">Effacer toutes les données</button>
+    </section>
+
+  </main>
+
+  <footer>
+    <p>&copy; 2025 - Suivi personnel</p>
+  </footer>
 
   <script src="script.js"></script>
 </body>
